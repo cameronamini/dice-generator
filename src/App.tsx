@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Die from "./Die";
+import "./styles.css";
 
-function App() {
+export default function App() {
+  const [diceQ, setDiceQ] = useState<number | null>(0);
+  const [numberInput, setNumberInput] = useState<number | null>(null);
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberInput(Number(event.currentTarget.value));
+  };
+
+  function submitHandler(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDiceQ(numberInput);
+  }
+
+  const arr = Array(diceQ).fill(0);
+
+  const render = arr.map((el, i) => <Die />);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={submitHandler}>
+        <label>Number of dice: </label>
+        <input id="numberInput" type="number" onChange={changeHandler} />
+        <button type="submit">Roll</button>
+      </form>
+      <div className="container"> {render}</div>
     </div>
   );
 }
-
-export default App;
